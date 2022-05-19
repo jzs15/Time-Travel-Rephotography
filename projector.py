@@ -157,7 +157,7 @@ def main(args):
     if args.contextual == 0:
         output_str += '-ctx'
     save(
-        [pjoin(args.results_dir, f"{stem(args.input)}-{opt_str}")],
+        [pjoin(args.results_dir, f"{stem(args.input)}/{output_str}")],
         img_out, latent, noises,
         imgs_rand=img_out_rand_noise
     )
