@@ -89,13 +89,6 @@ def save(
     for path_prefix, img, latent, noise in zip(path_prefixes, imgs_arr, latents, noises):
         os.makedirs(os.path.dirname(path_prefix), exist_ok=True)
         cv2.imwrite(path_prefix + ".png", img[...,::-1])
-        torch.save({"latent": latent.detach().cpu(), "noise": noise.detach().cpu()},
-                path_prefix + ".pt")
-
-    if imgs_rand is not None:
-        imgs_arr = make_image(imgs_rand)
-        for path_prefix, img in zip(path_prefixes, imgs_arr):
-            cv2.imwrite(path_prefix + "-rand.png", img[...,::-1])
 
 
 def main(args):
@@ -158,6 +151,11 @@ def main(args):
     img_out, _, _ = generator([latent], input_is_latent=True, noise=noises)
     img_out_rand_noise, _, _ = generator([latent], input_is_latent=True)
     # save output
+    output_str = 'output'
+    if args.color_transfer == 0:
+        output_str += '-color'
+    if args.contextual == 0:
+        output_str += '-ctx'
     save(
         [pjoin(args.results_dir, f"{stem(args.input)}-{opt_str}")],
         img_out, latent, noises,
